@@ -1,18 +1,8 @@
 package ru.yandex.practicum.mapper;
 
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.kafka.telemetry.event.ClimateSensorAvro;
-import ru.yandex.practicum.kafka.telemetry.event.LightSensorAvro;
-import ru.yandex.practicum.kafka.telemetry.event.MotionSensorAvro;
-import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
-import ru.yandex.practicum.kafka.telemetry.event.SwitchSensorAvro;
-import ru.yandex.practicum.kafka.telemetry.event.TemperatureSensorAvro;
-import ru.yandex.practicum.model.sensor.ClimateSensorEvent;
-import ru.yandex.practicum.model.sensor.LightSensorEvent;
-import ru.yandex.practicum.model.sensor.MotionSensorEvent;
-import ru.yandex.practicum.model.sensor.SensorEvent;
-import ru.yandex.practicum.model.sensor.SwitchSensorEvent;
-import ru.yandex.practicum.model.sensor.TemperatureSensorEvent;
+import ru.yandex.practicum.kafka.telemetry.event.*;
+import ru.yandex.practicum.model.sensor.*;
 
 @Component
 public class SensorEventMapper {
@@ -22,7 +12,8 @@ public class SensorEventMapper {
             case LightSensorEvent lightSensorEvent -> toLightSensorAvro((LightSensorEvent) event);
             case MotionSensorEvent motionSensorEvent -> toMotionSensorAvro((MotionSensorEvent) event);
             case SwitchSensorEvent switchSensorEvent -> toSwitchSensorAvro((SwitchSensorEvent) event);
-            case TemperatureSensorEvent temperatureSensorEvent -> toTemperatureSensorAvro((TemperatureSensorEvent) event);
+            case TemperatureSensorEvent temperatureSensorEvent ->
+                    toTemperatureSensorAvro((TemperatureSensorEvent) event);
             default -> throw new IllegalArgumentException("Неизвестный тип события: " + event.getClass().getName());
         };
 

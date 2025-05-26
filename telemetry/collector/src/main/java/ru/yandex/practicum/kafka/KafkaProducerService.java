@@ -27,7 +27,7 @@ public class KafkaProducerService implements AutoCloseable {
         this.producer = new KafkaProducer<>(config);
     }
 
-    public void send(SpecificRecordBase event, String hubId, Instant timestamp, String topic){
+    public void send(SpecificRecordBase event, String hubId, Instant timestamp, String topic) {
         ProducerRecord<String, SpecificRecordBase> record = new ProducerRecord<>(
                 topic,
                 null,
