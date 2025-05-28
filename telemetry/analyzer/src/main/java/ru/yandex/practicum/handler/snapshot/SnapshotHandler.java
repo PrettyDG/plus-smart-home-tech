@@ -5,12 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.kafka.telemetry.event.ClimateSensorAvro;
-import ru.yandex.practicum.kafka.telemetry.event.LightSensorAvro;
-import ru.yandex.practicum.kafka.telemetry.event.MotionSensorAvro;
-import ru.yandex.practicum.kafka.telemetry.event.SensorStateAvro;
-import ru.yandex.practicum.kafka.telemetry.event.SensorsSnapshotAvro;
-import ru.yandex.practicum.kafka.telemetry.event.SwitchSensorAvro;
+import ru.yandex.practicum.kafka.telemetry.event.*;
 import ru.yandex.practicum.model.Condition;
 import ru.yandex.practicum.model.Scenario;
 import ru.yandex.practicum.repository.ActionRepository;
@@ -34,11 +29,12 @@ public class SnapshotHandler {
     public void handleSnapshot(SensorsSnapshotAvro snapshot) {
         log.info("Handling snapshot: {}", snapshot);
         Map<String, SensorStateAvro> sensorState = snapshot.getSensorsState();
-        scenarioRepository.findByHubId(snapshot.getHubId()).stream()
-                .filter(scenario -> checkScenario(scenario, sensorState))
+        scenarioRepository.findByHubId(snapshot.getHubId())
                 .forEach(scenario -> {
-                    log.info("Send action from scenario {}", scenario);
-                    sendAction(scenario);
+                    if (checkScenario(scenario, sensorState)) {
+                        log.info("Send action from scenario {}", scenario);
+                        sendAction(scenario);
+                    }
                 });
     }
 
