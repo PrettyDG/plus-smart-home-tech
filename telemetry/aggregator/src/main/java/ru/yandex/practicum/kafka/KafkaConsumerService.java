@@ -7,6 +7,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Properties;
 
 @Service
+@ConfigurationProperties("aggregator.kafka")
 public class KafkaConsumerService implements AutoCloseable {
 
     private final KafkaConsumer<String, SpecificRecordBase> consumer;
