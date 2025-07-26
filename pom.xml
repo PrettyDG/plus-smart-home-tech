@@ -20,6 +20,7 @@
         <module>infra</module>
         <module>commerce</module>
         <module>infra/configServer</module>
+        <module>infra/discovery-server</module>
     </modules>
 
     <properties>

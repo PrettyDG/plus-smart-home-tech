@@ -23,13 +23,16 @@ spring:
         format_sql: true
     show-sql: true
   config:
-    import: configserver:http://localhost:8888
+    import: "configserver:"
   cloud:
     config:
       fail-fast: true
       retry:
         useRandomPolicy: true
         max-interval: 6000
+      discovery:
+        enabled: true
+        serviceId: config-server
 
 kafka:
   bootstrap-servers: localhost:9092
@@ -40,3 +43,10 @@ kafka:
     snapshot: telemetry.snapshots.v1
     hub: telemetry.hubs.v1
   auto-commit: false
+
+  eureka:
+    instance:
+      appname: ${spring.application.name}
+    client:
+      serviceUrl:
+        defaultZone: http://localhost:8761/eureka/
