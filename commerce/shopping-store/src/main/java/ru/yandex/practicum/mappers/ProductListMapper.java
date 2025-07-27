@@ -1,0 +1,12 @@
+package ru.yandex.practicum.mappers;
+
+import ru.yandex.practicum.dto.shoppingStore.ProductDto;
+import ru.yandex.practicum.models.Product;
+
+import java.util.List;
+
+public class ProductListMapper {
+    public static List<ProductDto> toProductDtoList(List<Product> products) {
+        return products.stream().map(ProductMapper::toDto).toList();
+    }
+}

@@ -33,19 +33,19 @@ public class KafkaConsumerService implements AutoCloseable {
         this.consumer = new KafkaConsumer<>(config);
     }
 
-    public ConsumerRecords<String, SpecificRecordBase> poll(Duration duration){
+    public ConsumerRecords<String, SpecificRecordBase> poll(Duration duration) {
         return consumer.poll(duration);
     }
 
-    public void subscribe(List<String> topics){
+    public void subscribe(List<String> topics) {
         consumer.subscribe(topics);
     }
 
-    public void commitSync(){
+    public void commitSync() {
         consumer.commitSync();
     }
 
-    public void wakeup(){
+    public void wakeup() {
         consumer.wakeup();
     }
 
