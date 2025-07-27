@@ -1,10 +1,12 @@
 package ru.yandex.practicum.mappers;
 
+import lombok.experimental.UtilityClass;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.dto.shoppingStore.ProductDto;
 import ru.yandex.practicum.models.Product;
 
 @Component
+@UtilityClass
 public class ProductMapper {
     public static ProductDto toDto(Product product) {
         return ProductDto.builder()
