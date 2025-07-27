@@ -1,6 +1,6 @@
 grpc:
   server:
-    port: 59091
+    port: 59090
 kafka:
   group-id: collector-sensor-group
   producer:
