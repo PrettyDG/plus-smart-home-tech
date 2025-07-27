@@ -3,6 +3,7 @@ package ru.yandex.practicum.service;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.dto.shoppingCart.ChangeProductQuantityRequest;
 import ru.yandex.practicum.dto.shoppingCart.ShoppingCartDto;
 import ru.yandex.practicum.dto.shoppingCart.ShoppingCartState;
@@ -41,6 +42,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return ShoppingCartMapper.toDto(getCart(username));
     }
 
+    @Transactional
     @Override
     public ShoppingCartDto addProductsToCart(String username, Map<UUID, Long> items) {
         checkUser(username);
@@ -58,6 +60,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return ShoppingCartMapper.toDto(savedCart);
     }
 
+    @Transactional
     @Override
     public void deactivateShoppingCart(String username) {
         checkUser(username);
@@ -66,6 +69,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         repository.save(shoppingCart);
     }
 
+    @Transactional
     @Override
     public ShoppingCartDto removeProductsFromCart(String username, List<UUID> productIds) {
         checkUser(username);
@@ -82,6 +86,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return ShoppingCartMapper.toDto(shoppingCart);
     }
 
+    @Transactional
     @Override
     public ShoppingCartDto changeQuantity(String username, ChangeProductQuantityRequest quantityRequest) {
         checkUser(username);

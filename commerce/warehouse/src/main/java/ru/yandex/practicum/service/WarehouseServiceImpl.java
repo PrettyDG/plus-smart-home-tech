@@ -3,6 +3,7 @@ package ru.yandex.practicum.service;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.dto.shoppingCart.ShoppingCartDto;
 import ru.yandex.practicum.dto.warehouse.AddProductToWarehouseRequest;
 import ru.yandex.practicum.dto.warehouse.AddressDto;
@@ -22,6 +23,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     private final WarehouseRepository repository;
     private AddressDto address = makeAdress();
 
+    @Transactional
     @Override
     public void addNewProductInWarehouse(NewWarehouseProduct newWarehouseProduct) {
         if (repository.existsById(newWarehouseProduct.getProductId())) {
@@ -56,6 +58,7 @@ public class WarehouseServiceImpl implements WarehouseService {
         return bookingProducts(warehouseProductList);
     }
 
+    @Transactional
     @Override
     public void addProductToWarehouse(AddProductToWarehouseRequest request) {
         Optional<WarehouseProduct> productOpt = repository.findById(request.getProductId());
