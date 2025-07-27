@@ -9,5 +9,6 @@ import java.util.Collection;
 @Repository
 public interface SensorRepository extends JpaRepository<Sensor, String> {
     Boolean existsByIdInAndHubId(Collection<String> ids, String hubId);
+
     void deleteByIdAndHubId(String id, String hubId);
 }

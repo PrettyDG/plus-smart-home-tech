@@ -6,6 +6,7 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
 import serializer.AvroSerializer;
 
@@ -14,6 +15,7 @@ import java.time.Instant;
 import java.util.Properties;
 
 @Service
+@ConfigurationProperties("collector.kafka")
 public class KafkaProducerService implements AutoCloseable {
 
     private final KafkaProducer<String, SpecificRecordBase> producer;

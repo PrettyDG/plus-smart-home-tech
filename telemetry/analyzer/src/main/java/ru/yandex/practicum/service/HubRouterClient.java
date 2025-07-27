@@ -16,10 +16,9 @@ import ru.yandex.practicum.model.Action;
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class HubRouterClient {
 
+    final Mapper mapper;
     @GrpcClient("hub-router")
     HubRouterControllerGrpc.HubRouterControllerBlockingStub hubRouter;
-
-    final Mapper mapper;
 
     public void sendRequest(Action action) {
         try {
