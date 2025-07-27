@@ -39,9 +39,9 @@ retry:
 spring:
   datasource:
     driverClassName: org.postgresql.Driver
-    password: postgres
-    url: jdbc:postgresql://localhost:5433/analyzer
-    username: postgres
+    url: jdbc:postgresql://localhost:5432/smart-home-tech
+    username: smart-home-tech
+    password: smart-home-tech
   jpa:
     hibernate:
       ddl-auto: none

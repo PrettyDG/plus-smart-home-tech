@@ -1,8 +1,10 @@
 package ru.yandex.practicum.mappers;
 
+import lombok.experimental.UtilityClass;
 import ru.yandex.practicum.dto.shoppingCart.ShoppingCartDto;
 import ru.yandex.practicum.models.ShoppingCart;
 
+@UtilityClass
 public class ShoppingCartMapper {
     public static ShoppingCartDto toDto(ShoppingCart shoppingCart) {
         return ShoppingCartDto.builder()

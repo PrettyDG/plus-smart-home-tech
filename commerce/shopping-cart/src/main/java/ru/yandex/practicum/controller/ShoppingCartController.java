@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.UUID;
 
 @RestController
-@Validated
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/shopping-cart")
