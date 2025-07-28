@@ -9,6 +9,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Properties;
 
 @Service
+@ConfigurationProperties("analyzer.kafka")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ConsumerSnapshotService implements AutoCloseable {
 
@@ -34,19 +36,19 @@ public class ConsumerSnapshotService implements AutoCloseable {
         this.consumer = new KafkaConsumer<>(config);
     }
 
-    public ConsumerRecords<String, SpecificRecordBase> poll(Duration duration){
+    public ConsumerRecords<String, SpecificRecordBase> poll(Duration duration) {
         return consumer.poll(duration);
     }
 
-    public void subscribe(List<String> topics){
+    public void subscribe(List<String> topics) {
         consumer.subscribe(topics);
     }
 
-    public void commitSync(){
+    public void commitSync() {
         consumer.commitSync();
     }
 
-    public void wakeup(){
+    public void wakeup() {
         consumer.wakeup();
     }
 
