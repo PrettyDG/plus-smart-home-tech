@@ -2,11 +2,13 @@ package ru.yandex.practicum.dto.warehouse;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 
 @Data
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class AddressDto {
     @NotBlank
     private String country;
