@@ -2,8 +2,10 @@ package ru.yandex.practicum.service;
 
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.dto.delivery.DeliveryClient;
 import ru.yandex.practicum.dto.order.CreateNewOrderRequest;
 import ru.yandex.practicum.dto.order.OrderDto;
@@ -19,18 +21,23 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
+@Slf4j
 public class OrderServiceImpl implements OrderService {
     private OrderRepository repository;
     private PaymentClient paymentClient;
     private DeliveryClient deliveryClient;
 
     @Override
+    @Transactional(readOnly = true)
     public Order getOrderById(UUID id) {
         return repository.findById(id).orElse(null);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<OrderDto> getOrdersByUser(String username) {
+        log.info("Запрос на получение всех заказов пользователя - " + username);
         if (username == null || username.isBlank()) {
             throw new NotFoundException("Username пуст");
         }
@@ -45,6 +52,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDto createNewOrder(CreateNewOrderRequest orderRequest) {
+        log.info("Запрос на создание заказа - " + orderRequest);
         Order order = Order.builder()
                 .orderId(UUID.randomUUID())
                 .shoppingCartId(orderRequest.getShoppingCart().getCartId())
@@ -59,6 +67,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDto returnOrder(ProductReturnRequest returnRequest) {
+        log.info("Запрос на возврат заказа - " + returnRequest);
         Order order = getOrderById(returnRequest.getOrderId());
         changeOrderState(order.getOrderId(), OrderState.PRODUCT_RETURNED);
 
@@ -67,6 +76,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDto paymentOrder(UUID orderId) {
+        log.info("Запрос на оплату заказа с id - " + orderId);
         Order order = getOrderById(orderId);
         changeOrderState(orderId, OrderState.PAID);
 
@@ -75,6 +85,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDto paymentFailedOrder(UUID orderId) {
+        log.info("Оплата заказа FAILED - " + orderId);
         Order order = getOrderById(orderId);
         changeOrderState(orderId, OrderState.PAYMENT_FAILED);
 
@@ -83,6 +94,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDto deliveryOrder(UUID orderId) {
+        log.info("Запрос на доставку заказа - " + orderId);
         Order order = getOrderById(orderId);
         changeOrderState(orderId, OrderState.ON_DELIVERY);
 
@@ -91,6 +103,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDto deliveryFailedOrder(UUID orderId) {
+        log.info("Доставка FAILED у заказа - " + orderId);
         Order order = getOrderById(orderId);
         changeOrderState(orderId, OrderState.DELIVERY_FAILED);
 
@@ -99,6 +112,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDto completedOrder(UUID orderId) {
+        log.info("Заказа завершён - " + orderId);
         Order order = getOrderById(orderId);
         changeOrderState(orderId, OrderState.COMPLETED);
 
@@ -107,6 +121,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDto calculateTotalOrder(UUID orderId) {
+        log.info("Запрос на подсчёт полной стоимости заказа " + orderId);
         Order order = getOrderById(orderId);
         order.setTotalPrice(paymentClient.getTotalCost(OrderMapper.toDto(order)));
         return OrderMapper.toDto(repository.save(order));
@@ -114,6 +129,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDto calculateDeliveryOrder(UUID orderId) {
+        log.info("Запрос на подсчёт стоимости доставки заказа - " + orderId);
         Order order = getOrderById(orderId);
         order.setDeliveryPrice(deliveryClient.getCostDelivery(OrderMapper.toDto(order)));
         return OrderMapper.toDto(repository.save(order));

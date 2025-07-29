@@ -2,7 +2,9 @@ package ru.yandex.practicum.service;
 
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.dto.delivery.DeliveryDto;
 import ru.yandex.practicum.dto.delivery.DeliveryState;
 import ru.yandex.practicum.dto.delivery.ShippedForDelivery;
@@ -18,6 +20,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class DeliveryServiceImpl implements DeliveryService {
     private final DeliveryRepository repository;
@@ -32,14 +35,18 @@ public class DeliveryServiceImpl implements DeliveryService {
     private static final Double ADDRESS_DELIVERY_SURCHARGE = 0.2;
 
     @Override
+    @Transactional
     public DeliveryDto createNewDelivery(DeliveryDto deliveryDto) {
+        log.info("Запрос на создание новой доставки - " + deliveryDto);
         Delivery delivery = DeliveryMapper.toEntity(deliveryDto);
         delivery.setDeliveryState(DeliveryState.CREATED);
         return DeliveryMapper.toDto(delivery);
     }
 
     @Override
+    @Transactional
     public DeliveryDto markDelivered(UUID orderId) {
+        log.info("Смена статуса на DELIVERED доставки заказа с id - " + orderId);
         Delivery delivery = getDelivery(orderId);
         delivery.setDeliveryState(DeliveryState.DELIVERED);
 
@@ -49,7 +56,9 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
 
     @Override
+    @Transactional
     public DeliveryDto markPicked(UUID orderId) {
+        log.info("Смена статуса на IN_PROGRESS доставки заказа с id - " + orderId);
         Delivery delivery = getDelivery(orderId);
         delivery.setDeliveryState(DeliveryState.IN_PROGRESS);
 
@@ -64,7 +73,9 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
 
     @Override
+    @Transactional
     public DeliveryDto markFailed(UUID orderId) {
+        log.info("Смена статуса на FAILED доставки заказа с id - " + orderId);
         Delivery delivery = getDelivery(orderId);
         delivery.setDeliveryState(DeliveryState.FAILED);
         orderClient.markDeliveryFailed(orderId);
@@ -73,6 +84,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     public Double calculateDelivery(OrderDto orderDto) {
+        log.info("Запрос на подсчёт стоимости доставки для заказа - " + orderDto);
         Delivery delivery = getDelivery(orderDto.getDeliveryId());
         Address fromAddress = delivery.getFromAddress();
         Address toAddress = delivery.getToAddress();

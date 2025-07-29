@@ -1,11 +1,13 @@
 package ru.yandex.practicum.mapper;
 
 
+import lombok.experimental.UtilityClass;
 import ru.yandex.practicum.dto.warehouse.AddressDto;
 import ru.yandex.practicum.models.Address;
 
 import java.util.UUID;
 
+@UtilityClass
 public class AddressMapper {
 
     public static AddressDto toDto(Address address) {

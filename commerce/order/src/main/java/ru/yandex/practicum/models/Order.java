@@ -1,16 +1,14 @@
 package ru.yandex.practicum.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import ru.yandex.practicum.dto.order.OrderState;
 
 import java.util.Map;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Builder
 @NoArgsConstructor

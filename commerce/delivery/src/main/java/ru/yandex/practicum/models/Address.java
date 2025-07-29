@@ -1,13 +1,13 @@
 package ru.yandex.practicum.models;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.util.UUID;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name = "addresses")
 @Builder
 public class Address {

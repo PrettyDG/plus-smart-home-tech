@@ -2,7 +2,9 @@ package ru.yandex.practicum.service;
 
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.dto.order.OrderDto;
 import ru.yandex.practicum.dto.payment.PaymentDto;
 import ru.yandex.practicum.dto.payment.PaymentStatus;
@@ -15,6 +17,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class PaymentServiceImpl implements PaymentService {
     private final PaymentRepository repository;
@@ -31,7 +34,9 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
+    @Transactional
     public PaymentDto createPaymentOrder(OrderDto orderDto) {
+        log.info("Запрос на создание платежа для заказа - " + orderDto);
         if (orderDto.getTotalPrice() == null || orderDto.getDeliveryPrice() == null || orderDto.getProductPrice() == null) {
             throw new IllegalArgumentException("Price = null");
         }
@@ -49,6 +54,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public Double getTotalCost(OrderDto orderDto) {
+        log.info("Запрос на получение полной стоимости платежа для заказа - " + orderDto);
         if (orderDto.getTotalPrice() == null || orderDto.getDeliveryPrice() == null || orderDto.getProductPrice() == null) {
             throw new IllegalArgumentException("Price = null");
         }
@@ -59,7 +65,9 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
+    @Transactional
     public void refundPayment(UUID paymentId) {
+        log.info("Успешный платеж с ID - " + paymentId);
         Payment payment = getPaymentById(paymentId);
         payment.setStatus(PaymentStatus.SUCCESS);
 
@@ -68,6 +76,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public Double getProductCost(OrderDto orderDto) {
+        log.info("Запрос на получение стоимости продуктов для заказа - " + orderDto);
         Map<UUID, Long> products = orderDto.getProducts();
         if (products == null) {
             throw new NotFoundException("Нету товаров в заказе - " + orderDto);
@@ -84,7 +93,9 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
+    @Transactional
     public void failedPayment(UUID paymentId) {
+        log.info("Платёж FAILED с id - " + paymentId);
         Payment payment = getPaymentById(paymentId);
         payment.setStatus(PaymentStatus.FAILED);
 
